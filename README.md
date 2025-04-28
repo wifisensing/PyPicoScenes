@@ -34,7 +34,7 @@ Both VS2019 and VS2022 can compile cppyy. For VS2022 users, additional installat
     * Windows 10 SDK
     * MSVC v142 - VS2019 C++ x64/x86 build tools
 3. Install cppyy  
-Use venv to avoid polluting system directories and enable full cleanup by simply deleting the virtual environment directory (e.g., "WORK" in this example). Open ​​Visual Studio x64 Native Tools Command Prompt​​, and ​​for VS2022 users​​, specify the `VS2019 v142` toolchain:
+Use venv to avoid polluting system directories and enable full cleanup by simply deleting the virtual environment directory (e.g., "WORK" in this example). Open ​​Visual Studio `x64 Native Tools Command Prompt`​​, and ​​for VS2022 users​​, specify the `VS2019 v142` toolchain:
 ```bash
     # Set build environment to VS2019  
     # Set VCToolsInstallDir to your actual Visual Studio installation directory.
@@ -59,9 +59,27 @@ Execute WORK\Scripts\activate to activate the Python environment created in Step
 
 
 # 3. Cppyy Wrapping for PicoScenes 
-[Cppyy](https://cppyy.readthedocs.io/en/latest/#), built upon the Cling interpreter, is a dynamic runtime Python-C++ bidirectional binding tool that generates efficient interfaces through real-time parsing of C++ code, enabling deep interoperability between the two languages. Its core value lies in zero manual wrapping, high performance, low memory overhead, and support for complex scenarios like cross-language inheritance, template instantiation, and exception mapping. It significantly simplifies the process of calling C++ libraries from Python, making it particularly suitable for large-scale projects and interactive development. The following explains how to use cppyy to wrap PicoScenes.
+[Cppyy](https://cppyy.readthedocs.io/en/latest/#), built upon the Cling interpreter, is a dynamic runtime Python-C++ bidirectional binding tool that generates efficient interfaces through real-time parsing of C++ code, enabling deep interoperability between the two languages. Its core value lies in zero manual wrapping, high performance, low memory overhead, and support for complex scenarios like cross-language inheritance, template instantiation, and exception mapping. It significantly simplifies the process of calling C++ libraries from Python, making it particularly suitable for large-scale projects and interactive development.   
+```python
+    """
+    The following example uses STL to demonstrate how to use cppyy for interaction between Python and C++.
+    """
+    # Using C++ vector
+    import cppyy
+    cppyy.include("vector")
+    # C++ symbols reside in cppyy.gbl namespace, access via cppyy.gbl
+    vec = cppyy.gbl.std.vector[int](3, 1)
+    print(vec)  # Outputs { 1, 1, 1 }
+    # Using size() method of vector<int> in Python
+    print(vec.size())
+    # Using push_back() method of vector<int> in Python
+    vec.push_back(5)
+    print(vec)  # Outputs { 1, 1, 1, 5 }
+    print(vec.size())
+```
+The following explains how to use cppyy to wrap PicoScenes.
 
-## 3.1. Adding PicoScenes to the Path
+## 3.1. Adding PicoScenes to cppyy's Path
 Assuming the absolute installation path of PicoScenes is **​​your_picoscenes_path**​​, first add the header files and dynamic libraries to cppyy's path:
 ```python
     import cppyy
@@ -124,7 +142,7 @@ Configure RF front-end parameters (e.g., sampling rate, bandwidth, center freque
 When implementing frame transmission functionality, the tx parameters (e.g., packet format, MCS, STS) must be configured via Python APIs. 
 5. Functional Implementation​​  
 Activate the NIC's transceiver services and execute data transmission/reception operations using the hardware-specific low-level APIs.
-6. Registering Python Callbacks  
+6. Registering Python Callbacks(optional)  
 PyPicoScenes allows registering Python callback functions to process received WiFi packets. It is particularly important to note that the first formal parameter of the registered callback function must represent the WiFi packet, while all subsequent formal parameters must have default values specified. For example:
 ```python
     def call_back(frame, arg1=1, arg2=2, arg3=3,...)
@@ -1362,3 +1380,6 @@ def transmit_frame(nicName:str = '4'):
 
 transmit_frame("4")
 ```
+
+## 3.5. Important Notes
+PyPicoScenes leverages `cppyy`'s dynamic binding technology to ​​efficiently encapsulate​​ PicoScenes' C++ APIs. Developers can directly invoke low-level APIs in Python scripts by including the relevant header files (e.g., `include("PicoScenes/SystemTools.hxx")`) and loading dynamic libraries (e.g., `load_library("libFrontEnd")`), enabling core functionalities like `​​wireless signal transmission/reception​`​ and `​​CSI file parsing​`​. The Python APIs are ​​`identical`​​ to their native C++ counterparts, with usage details documented in the [PicoScenes Native API Reference](https://ps.zpj.io/api_docs/). Powered by cppyy's real-time parsing mechanism, Python can directly manipulate hardware control logic (e.g., configuring USRP sampling rates or WiFi channel parameters) while maintaining ​​strict behavioral consistency​​ with the C++ implementation. Developers must validate dynamic library paths and environmental dependencies during cross-platform deployments.
