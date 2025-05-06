@@ -2,17 +2,42 @@ from PyPicoScenes import *
 
 FrameDumper = cppyy.gbl.FrameDumper
 
-# Simple callback function for frame reception
-def py_call_back(frame):
-    print("-----------------------------Frame Received----------------------------")
-    return True
+def get_simple_call_back():
+    # Simple callback function
+    def py_call_back(frame):
+        print("-----------------------------get one frame----------------------------")
+        return True
+    return py_call_back
 
-# Callback to dump frames to file
-def py_call_back_dump(frame, fileName="testCSI"):
-    print(f"Dumping frame to {fileName}")
-    # Save frame to file
-    FrameDumper.getInstanceWithoutTime(fileName).dumpRxFrame(frame)
-    return True
+def get_call_back_dump(fileName="testCSI"):
+    # Python callback receives frame and saves it to file
+    def py_call_back_dump(frame):
+        print(f"dump a frame to {fileName}")
+        # Save frame to file
+        FrameDumper.getInstanceWithoutTime(fileName).dumpRxFrame(frame)
+        return True
+    return py_call_back_dump
+
+def get_call_back_plot(nicName:str = "usrp"):
+    # Get CSILivePlotter instance for usrp"
+    CSILivePlotter.getInstance("usrp").startPlotService()
+
+    # Set CSI magnitude to absolute value
+    absoluteStyle = CSILivePlotter.MagnitudePlotStyle(CSILivePlotter.MagnitudePlotStyle.Absolute)
+    # Alternative: Set CSI magnitude to logarithmic scale
+    # logStyle = CSILivePlotter.MagnitudePlotStyle(CSILivePlotter.MagnitudePlotStyle.Log)
+
+    CSILivePlotter.getInstance("usrp").setMagnitudePlotStyle(absoluteStyle)
+    plotter = CSILivePlotter.getInstance("usrp")
+    # Python callback receives frame and plot it
+    def py_call_back_plot(frame):
+        if plotter and plotter.isPlotServiceOn():
+            # Must call this function before plotting the frame
+            frame.csiSegment.getCSI().removeCSDAndInterpolateCSI()
+            plotter.plotFrameAsync(frame)
+        return True
+    return py_call_back_plot
+
 
 def recv_frame(nicName: str = 'usrp'):
     # Initialize PicoScenes platform
@@ -90,9 +115,11 @@ def recv_frame(nicName: str = 'usrp'):
     nic.startRxService()
     
     # Register callbacks
+    # Register Python callbacks
     call_backs = {
-        "call_back" : py_call_back,
-        "call_back_dump" : py_call_back_dump,
+        "call_back" : get_simple_call_back(),
+        "call_back_dump" : get_call_back_dump(),
+        "call_back_plot" : get_call_back_plot(nicName),
     }
     for call_back_name, call_back in call_backs.items():
         nic.registerGeneralHandler(call_back_name, call_back)

@@ -45,19 +45,17 @@ enum class EchoProbeReplyStrategy : uint8_t {
 
 class EchoProbeParameters {
 public:
-    EchoProbeParameters();
-
     EchoProbeWorkingMode workingMode = EchoProbeWorkingMode::Standby;
     std::optional<std::array<uint8_t, 6>> inj_target_mac_address;
     std::optional<bool> inj_for_intel5300;
-    uint32_t tx_delay_us;
+    uint32_t tx_delay_us{500000};
     std::optional<uint32_t> delayed_start_seconds;
-    bool useBatchAPI;
+    bool useBatchAPI{false};
     uint32_t batchLength;
 
     std::optional<std::string> outputFileName;
     bool randomMAC;
-    EchoProbeInjectionContent injectorContent;
+    EchoProbeInjectionContent injectorContent{EchoProbeInjectionContent::Full};
     std::optional<uint32_t> randomPayloadLength;
 
     std::optional<double> cf_begin;
@@ -70,8 +68,8 @@ public:
     std::optional<double> sf_end;
     std::optional<double> sf_step;
 
-    uint32_t tx_max_retry;
-    EchoProbeReplyStrategy replyStrategy;
+    uint32_t tx_max_retry{100};
+    EchoProbeReplyStrategy replyStrategy{EchoProbeReplyStrategy::ReplyWithFullPayload};
 
     std::optional<PacketFormatEnum> ack_format;
     std::optional<uint32_t> ack_cbw;
@@ -79,9 +77,9 @@ public:
     std::optional<uint32_t> ack_numSTS;
     std::optional<uint32_t> ack_guardInterval;
 
-    std::optional<uint32_t> timeout_ms;
-    std::optional<uint32_t> delay_after_cf_change_ms;
-    std::optional<uint32_t> numOfPacketsPerDotDisplay;
+    std::optional<uint32_t> timeout_ms{150};
+    std::optional<uint32_t> delay_after_cf_change_ms{5};
+    std::optional<uint32_t> numOfPacketsPerDotDisplay{10};
 };
 
 void setTxParameters(AbstractNIC* nic, PicoScenesFrameTxParameters parameters){

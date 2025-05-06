@@ -39,6 +39,8 @@ cppyy.include("queue")
 cppyy.include("atomic")
 cppyy.include("condition_variable")
 
+## include CSILivePlotter.hxx
+cppyy.include("PicoScenes/CSILivePlotter.hxx")
 cppyy.include("PicoScenes/SDRExtraSegment.hxx")
 cppyy.include("PicoScenes/PicoScenesFrameTxParameters.hxx")
 cppyy.include("PicoScenes/MVMExtraSegment.hxx")
@@ -91,6 +93,9 @@ isIntelMVMTypeNIC = cppyy.gbl.isIntelMVMTypeNIC
 ChannelCodingEnum = cppyy.gbl.ChannelCodingEnum
 PayloadDataType = cppyy.gbl.PayloadDataType
 PayloadSegment = cppyy.gbl.PayloadSegment
+isSDR = cppyy.gbl.isSDR
+## plot
+CSILivePlotter = cppyy.gbl.CSILivePlotter
 
 PicoScenesStart = cppyy.gbl.PicoScenesStart
 PicoScenesWait = cppyy.gbl.PicoScenesWait

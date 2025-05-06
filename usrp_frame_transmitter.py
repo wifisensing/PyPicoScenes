@@ -2,7 +2,7 @@ from PyPicoScenes import *
 import random
 import time
 
-cppyy.include("PyPicoScenesCommon.hpp")
+cppyy.include("utils/PyPicoScenesCommon.hpp")
 FrameDumper = cppyy.gbl.FrameDumper
 
 EchoProbeInjectionContent = cppyy.gbl.EchoProbeInjectionContent
