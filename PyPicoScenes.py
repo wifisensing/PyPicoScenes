@@ -74,6 +74,7 @@ cppyy.include("PicoScenes/RXSExtraInfo.hxx")
 cppyy.include("PicoScenes/BBSignalsFileWriter.hxx")
 cppyy.include("PicoScenes/DSPRateTracker.hxx")
 cppyy.include("PicoScenes/AbstractSDRFrontEnd.hxx")
+cppyy.include("PicoScenes/MAC80211CSIExtractableFrontEnd.hxx")
 
 std = cppyy.gbl.std
 ChannelBandwidthEnum = cppyy.gbl.ChannelBandwidthEnum
@@ -94,6 +95,7 @@ ChannelCodingEnum = cppyy.gbl.ChannelCodingEnum
 PayloadDataType = cppyy.gbl.PayloadDataType
 PayloadSegment = cppyy.gbl.PayloadSegment
 isSDR = cppyy.gbl.isSDR
+MAC80211CSIExtractableFrontEnd = cppyy.gbl.MAC80211CSIExtractableFrontEnd
 ## plot
 CSILivePlotter = cppyy.gbl.CSILivePlotter
 

@@ -4,8 +4,6 @@ import time
 import random
 import math
 
-EchoProbeParameters = cppyy.gbl.EchoProbeParameters
-
 def get_call_back_dump(fileName="testCSI"):
     # Python callback receives frame and saves it to file
     def py_call_back_dump(frame):
@@ -23,7 +21,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     nic = getNic(nicName)
     
     frontEnd = nic.getTypedFrontEnd[AbstractSDRFrontEnd]()
-    ## 设置发送参数
+    ## Set transmission parameters
     txChannelList = [0]
     frontEnd.setTxChannels(txChannelList)
     nic.getUserSpecifiedTxParameters().txcm = frontEnd.getTxChainMask()
@@ -31,7 +29,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
         frontEnd.setTxpower(0.1)
     frontEnd.setTxAntennas(["TX/RX"])
     
-    ## 设置接收参数
+    ## Set reception parameters
     rxChannelList = [0]
     frontEnd.setRxChannels(rxChannelList)
     if (frontEnd.getRxChainMask() != 0):
@@ -39,7 +37,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     frontEnd.setRxAntennas(["RX2"])
     frontEnd.setNumThreads4RxDecoding(1)
     
-    ## 
+    ## Apply preset configurations
     frontEnd.applyPreset("TR_CBW_20_EHTSU", False)
     frontEnd.setClockSource("internal")
     frontEnd.setTimeSource("internal")
@@ -47,7 +45,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     if (frontEnd.getRxChainMask() != 0):
         frontEnd.setAGC(False)
      
-    ## 开启radar模式
+    ## Enable radar mode
     tmp = std.vector[std.array[std.uint8_t, 6]]()
     tmp.push_back(MagicIntel123456)
     nic.getFrontEnd().setDestinationMACAddressFilter(tmp)
@@ -63,7 +61,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     for call_back_name, call_back in call_backs.items():
         nic.registerGeneralHandler(call_back_name, call_back)
     
-    ##
+    ## Configure transmission parameters
     frontEnd = nic.getFrontEnd()
     round_repeat = parameters.round_repeat.value_or(1)
     cf_repeat = parameters.cf_repeat.value_or(100)
@@ -80,7 +78,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
         time.sleep(tx_delayed_start)
     
     if parameters.useBatchAPI:
-        prebuiltFrames = buildBatchFrames(EchoProbePacketFrameType.SimpleInjectionFrameType)
+        prebuiltFrames = buildBatchFrames(EchoProbePacketFrameType.SimpleInjectionFrameType, nic, parameters)
     for ri in range(round_repeat):
         for sf_value in sfList:
             for cf_value in cfList:

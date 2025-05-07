@@ -3,10 +3,11 @@ import os
 import random
 from PyPicoScenes import *
 cppyy.include("PyPicoScenesCommon.hpp")
-FrameDumper = cppyy.gbl.FrameDumper
 
+FrameDumper = cppyy.gbl.FrameDumper
 EchoProbeInjectionContent = cppyy.gbl.EchoProbeInjectionContent
 EchoProbePacketFrameType = cppyy.gbl.EchoProbePacketFrameType
+EchoProbeParameters = cppyy.gbl.EchoProbeParameters
 
 def buildBasicFrame(taskId, frameType, nic, parameters):
     frame = nic.initializeTxFrame()

@@ -1,52 +1,10 @@
 from PyPicoScenes import *
+from buildFrames import *
 import random
 import time
 
-cppyy.include("utils/PyPicoScenesCommon.hpp")
-FrameDumper = cppyy.gbl.FrameDumper
-
-EchoProbeWorkingMode = cppyy.gbl.EchoProbeWorkingMode
-EchoProbeInjectionContent = cppyy.gbl.EchoProbeInjectionContent
-EchoProbePacketFrameType = cppyy.gbl.EchoProbePacketFrameType
-EchoProbeReplyStrategy = cppyy.gbl.EchoProbeReplyStrategy
-EchoProbeParameters = cppyy.gbl.EchoProbeParameters
-
-def buildBasicFrame(taskId, frameType, nic, **kwargs):
-    frame = nic.initializeTxFrame()
-    if frameType == EchoProbePacketFrameType.SimpleInjectionFrameType and kwargs.get("injectorContent") == EchoProbeInjectionContent.NDP:
-        frame.setTxParameters(nic.getUserSpecifiedTxParameters()).txParameters.NDPFrame = True
-    else:
-        frame.setTxParameters(nic.getUserSpecifiedTxParameters())
-        frame.setTaskId(taskId)
-        frame.setPicoScenesFrameType(frameType)
-        if frameType == EchoProbePacketFrameType.SimpleInjectionFrameType and kwargs.get("injectorContent") == EchoProbeInjectionContent.Full:
-            frame.addSegment(std.make_shared[ExtraInfoSegment](nic.getFrontEnd().buildExtraInfo()))
-        if frameType == EchoProbePacketFrameType.EchoProbeRequestFrameType:
-            frame.addSegment(std.make_shared[ExtraInfoSegment](nic.getFrontEnd().buildExtraInfo()))
-        if kwargs.get("randomPayloadLength"):
-            l = int(kwargs["randomPayloadLength"])
-            vec = [random.randint(0,255) for _ in range(l)]
-            segment = std.make_shared[PayloadSegment]("RandomPayload", vec, PayloadDataType.RawData)
-            frame.addSegment(segment)
-
-    sourceAddr = nic.getFrontEnd().getMacAddressPhy()
-    if kwargs.get("randomMAC"):
-        sourceAddr[0] = random.randint(0,255)
-        sourceAddr[1] = random.randint(0,255)
-    frame.setSourceAddress(sourceAddr.data())
-    frame.setDestinationAddress(MagicIntel123456.data())
-    frame.set3rdAddress(nic.getFrontEnd().getMacAddressPhy().data())
-    frame.txParameters.forceSounding = True
-
-    if kwargs.get("inj_for_intel5300"):
-        frame.setSourceAddress(MagicIntel123456.data())
-        frame.setDestinationAddress(MagicIntel123456.data())
-        frame.set3rdAddress(nic.getFrontEnd().getMacAddressPhy().data())
-        frame.setForceSounding(False)
-        frame.setChannelCoding(ChannelCodingEnum.BCC)
-    return frame
-
-def transmit_frame(nicName:str = '4'):
+def transmit_frame(nicName:str = '4', parameters=None):
+    assert parameters, "parameters can't be None"
     # Start PicoScenes platform
     picoscenes_start()
     # Get network interface card
@@ -86,7 +44,7 @@ def transmit_frame(nicName:str = '4'):
 
     for i in range(int(cf_repeat)):
         taskId = random.randint(9999, 65535)
-        txframe = buildBasicFrame(taskId, EchoProbePacketFrameType.SimpleInjectionFrameType, nic)
+        txframe = buildBasicFrame(taskId, EchoProbePacketFrameType.SimpleInjectionFrameType, nic, parameters)
         nic.transmitPicoScenesFrameSync(txframe)
         time.sleep(tx_delay_us/1e6)
         
@@ -100,4 +58,5 @@ def transmit_frame(nicName:str = '4'):
     picoscenes_wait()
 
 if __name__ == "__main__":
-    transmit_frame("4")
+    parameters = EchoProbeParameters()
+    transmit_frame("4", parameters)
