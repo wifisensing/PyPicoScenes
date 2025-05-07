@@ -1203,5 +1203,5 @@ parameters = EchoProbeParameters()
 transmit_frame("4", parameters)
 ```
 
-## 3.5. Important Notes
+# 5. Important Notes
 PyPicoScenes leverages `cppyy`'s dynamic binding technology to ​​efficiently encapsulate​​ PicoScenes' C++ APIs. Developers can directly invoke low-level APIs in Python scripts by including the relevant header files (e.g., `include("PicoScenes/SystemTools.hxx")`) and loading dynamic libraries (e.g., `load_library("libSystemTools")`), enabling core functionalities like `​​wireless signal transmission/reception​`​ and `​​CSI file parsing​`​. The Python APIs are ​​`identical`​​ to their native C++ counterparts, with usage details documented in the [PicoScenes Native API Reference](https://ps.zpj.io/api_docs/). Powered by cppyy's real-time parsing mechanism, Python can directly manipulate hardware control logic (e.g., configuring USRP sampling rates or WiFi channel parameters) while maintaining ​​strict behavioral consistency​​ with the C++ implementation. Developers must validate dynamic library paths and environmental dependencies during cross-platform deployments.
