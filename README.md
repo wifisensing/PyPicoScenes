@@ -4,36 +4,40 @@ PyPicoScenes is a Python binding library for the C++-based Integrated Sensing an
 # 2. Installation
 PyPicoScenes relies on Python's cppyy library along with PicoScenes header files and dynamic libraries. Currently supported platforms include Ubuntu, macOS, and Windows.
 ## 2.1. Installing PyPicoScenes on Ubuntu
-1. ​​PicoScenes Installation​  
+1. Obtain PyPicoScenes  
+PyPicoScenes can only be `git clone` from it's [git repo](https://github.com/wifisensing/PyPicoScenes).
+2. ​​PicoScenes Installation​  
 [Refer to the PicoScenes installation guide here](https://ps.zpj.io/installation.html#picoscenes-software-installation).
-2. Anaconda Installation​  
+3. Anaconda Installation​  
 [Refer to the Anaconda installation guide here](https://anaconda.org/anaconda/conda).
-3. Update Anaconda Environment​  
+4. Update Anaconda Environment​  
 Activate your conda environment using conda activate ENV_NAME. If the libstdc++ dynamic library in Conda is outdated, run:
 ```bash
     conda install -c conda-forge libstdcxx-ng=13 -y  
 ```
-4. Install cppyy && Dependencies  
+5. Install cppyy && Dependencies  
 cppyy is a Cling/LLVM-based dynamic binding tool that enables seamless Python-C++ interaction through runtime C++ code parsing. Its key advantages include no precompiled bindings, support for C++98 to C++20 standards, and compatibility with both PyPy and CPython interpreters. We recommend installing cppyy and its dependencies via Anaconda:
 ```bash
     conda create -n ENV_NAME python=3.10  
     conda activate ENV_NAME  
     pip install -r requirements  
 ```
-5. Verify Installation  
+6. Verify Installation  
 Navigate to the PyPicoScenes directory and run `python parse_frame.py`. Successful cppyy installation will output:
 ```bash
     <cppyy.gbl.std.optional<ModularPicoScenesRxFrame> object at 0xeb54fa0>  
 ```
 
 ## 2.2. Installing PyPicoScenes on Windows
-1. PicoScenes Installation​  
+1. Obtain PyPicoScenes  
+PyPicoScenes can only be `git clone` from it's [git repo](https://github.com/wifisensing/PyPicoScenes).
+2. PicoScenes Installation​  
 [Refer to the PicoScenes installation guide here](https://ps.zpj.io/installation.html#picoscenes-software-installation).
-2. Install MSVC Build Tools​  
+3. Install MSVC Build Tools​  
 Both VS2019 and VS2022 can compile cppyy. For VS2022 users, additional installations are required:
     * Windows 10 SDK
     * MSVC v142 - VS2019 C++ x64/x86 build tools
-3. Install cppyy  
+4. Install cppyy  
 Use venv to avoid polluting system directories and enable full cleanup by simply deleting the virtual environment directory (e.g., "WORK" in this example). Open ​​Visual Studio `x64 Native Tools Command Prompt`​​, and ​​for VS2022 users​​, specify the `VS2019 v142` toolchain:
 ```bash
     # Set build environment to VS2019  
@@ -51,7 +55,7 @@ Use venv to avoid polluting system directories and enable full cleanup by simply
     python -m pip install CPyCppyy==1.13.0 --no-deps --no-build-isolation --force-reinstall  
     python -m pip install cppyy==3.5.0 --no-deps --no-build-isolation --force-reinstall  
 ```
-4. Verify Installation  
+5. Verify Installation  
 Execute WORK\Scripts\activate to activate the Python environment created in Step 3. Navigate to the PyPicoScenes directory and run `python parse_frame.py`. Successful cppyy installation will output:
 ```bash
     <cppyy.gbl.std.optional<ModularPicoScenesRxFrame> object at 0xeb54fa0>  
