@@ -1,4 +1,4 @@
-from PyPicoScenes import *
+from PyPicoScenes.PyPicoScenes import *
 
 FrameDumper = cppyy.gbl.FrameDumper
 

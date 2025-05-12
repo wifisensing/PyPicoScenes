@@ -1,8 +1,7 @@
 import sys
 import os
 import random
-from PyPicoScenes import *
-cppyy.include("PyPicoScenesCommon.hpp")
+from .PyPicoScenes import *
 
 FrameDumper = cppyy.gbl.FrameDumper
 EchoProbeInjectionContent = cppyy.gbl.EchoProbeInjectionContent

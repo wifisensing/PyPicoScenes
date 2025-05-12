@@ -1,6 +1,6 @@
 import struct
 import numpy as np
-from PyPicoScenes import *
+from PyPicoScenes.PyPicoScenes import *
 import os
 
 def parseCSIFile(filename: str = "", pos: int = 0, num: int = 0):

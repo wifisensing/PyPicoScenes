@@ -1,5 +1,5 @@
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 

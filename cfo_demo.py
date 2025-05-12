@@ -33,7 +33,8 @@ def get_call_back_plot(nicName:str = "4"):
         return True
     return py_call_back_plot
 
-def radar_mode(nicName:str="usrp", parameters=None):
+
+def radar_mode(nicName:str="usrp", txFreq=2300, rxFreq=2300.001, parameters=None):
     assert parameters, "parameters can't be None"
     # Start PicoScenes platform
     picoscenes_start()
@@ -45,6 +46,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     txChannelList = [0]
     frontEnd.setTxChannels(txChannelList)
     nic.getUserSpecifiedTxParameters().txcm = frontEnd.getTxChainMask()
+    frontEnd.setTxCarrierFrequencies([txFreq * 1e6])
     if (frontEnd.getTxChainMask() != 0):
         frontEnd.setTxpower(0.1)
     frontEnd.setTxAntennas(["TX/RX"])
@@ -52,6 +54,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     ## Set reception parameters
     rxChannelList = [0]
     frontEnd.setRxChannels(rxChannelList)
+    frontEnd.setRxCarrierFrequencies([rxFreq * 1e6])
     if (frontEnd.getRxChainMask() != 0):
         frontEnd.setRxGain(0.65)
     frontEnd.setRxAntennas(["RX2"])
@@ -61,7 +64,7 @@ def radar_mode(nicName:str="usrp", parameters=None):
     frontEnd.applyPreset("TR_CBW_20_EHTSU", False)
     frontEnd.setClockSource("internal")
     frontEnd.setTimeSource("internal")
-    frontEnd.setCarrierFrequency(5955e6)
+    # frontEnd.setCarrierFrequency(5955e6)
     if (frontEnd.getRxChainMask() != 0):
         frontEnd.setAGC(False)
      
@@ -132,4 +135,6 @@ def radar_mode(nicName:str="usrp", parameters=None):
     
 if __name__ == "__main__":
     parameters = EchoProbeParameters()
-    radar_mode("usrp", parameters)
+    txFreq = 2300
+    rxFreq = 2300.001
+    radar_mode("usrp", txFreq=txFreq, rxFreq=rxFreq, parameters=parameters)
