@@ -46,7 +46,6 @@ class RTTResponder:
         tmp = std.vector[std.array[std.uint8_t, 6]]()
         tmp.push_back(MagicIntel123456)
         self.nic.getFrontEnd().setDestinationMACAddressFilter(tmp)
-        self.nic.getTypedFrontEnd[AbstractSDRFrontEnd]().setFullDuplex(True)
         self.nic.startRxService()
         self.nic.startTxService()
         

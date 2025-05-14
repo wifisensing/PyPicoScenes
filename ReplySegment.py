@@ -6,8 +6,8 @@ cppyy.cppdef("""
 #include <PicoScenes/PicoScenesCommons.hxx>
 #include <PicoScenes/AbstractPicoScenesFrameSegment.hxx>
 
-enum class RTTFrameType : uint16_t {
-    RTTInitiation = 1000,
+enum class RTTFrameType : uint8_t {
+    RTTInitiation = 40,
     ReplyStart,
     ReplyEnd,
 };

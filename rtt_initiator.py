@@ -15,7 +15,7 @@ class RTTInitiator:
         # Start PicoScenes platform
         picoscenes_start()
         # Get network interface card
-        self.self.nic = getNic(nicName)
+        self.nic = getNic(nicName)
         
         frontEnd = self.nic.getTypedFrontEnd[AbstractSDRFrontEnd]()
         ## Set transmission parameters
@@ -46,7 +46,6 @@ class RTTInitiator:
         tmp = std.vector[std.array[std.uint8_t, 6]]()
         tmp.push_back(MagicIntel123456)
         self.nic.getFrontEnd().setDestinationMACAddressFilter(tmp)
-        self.nic.getTypedFrontEnd[AbstractSDRFrontEnd]().setFullDuplex(True)
         self.nic.startRxService()
         self.nic.startTxService()
         
