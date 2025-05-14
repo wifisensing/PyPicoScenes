@@ -247,7 +247,7 @@ This section demonstrates how to implement ​​PHY-layer frame reception​​
 
 
 ```python
-from PyPicoScenes import *
+from PyPicoScenes.PyPicoScenes import *
 
 FrameDumper = cppyy.gbl.FrameDumper
 
@@ -400,7 +400,7 @@ PicoScenes supports multi-channel Rx and even multi-USRP combined multi-channel 
 
 
 ```python
-from PyPicoScenes import *
+from PyPicoScenes.PyPicoScenes import *
 
 FrameDumper = cppyy.gbl.FrameDumper
 
@@ -530,8 +530,8 @@ These capabilities enable advanced applications such as ​​MIMO precoding val
 
 
 ```python
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 
@@ -661,8 +661,8 @@ Assuming your USRP device IDs are usrp192.168.30.2 and usrp192.168.70.2, you can
 
 
 ```python
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 
@@ -769,8 +769,8 @@ Assuming your USRP device ID is usrp192.168.30.2,192.168.70.2, you can use the f
 
 
 ```python
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 
@@ -910,7 +910,7 @@ Then execute the following code to capture WiFi packets and measure CSI:
 
 
 ```python
-from PyPicoScenes import *
+from PyPicoScenes.PyPicoScenes import *
 
 FrameDumper = cppyy.gbl.FrameDumper
 
@@ -998,8 +998,8 @@ After completing NIC configuration, execute the following code to transmit WiFi 
 
 
 ```python
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 
@@ -1070,8 +1070,8 @@ Then execute the following code:
 
 
 ```python
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 
@@ -1143,8 +1143,8 @@ PyPicoScenes provides APIs for real-time channel and bandwidth configuration of 
 
 
 ```python
-from PyPicoScenes import *
-from buildFrames import *
+from PyPicoScenes.PyPicoScenes import *
+from PyPicoScenes.buildFrames import *
 import random
 import time
 
@@ -1207,5 +1207,5 @@ parameters = EchoProbeParameters()
 transmit_frame("4", parameters)
 ```
 
-# 5. Important Notes
+## 3.5. Important Notes
 PyPicoScenes leverages `cppyy`'s dynamic binding technology to ​​efficiently encapsulate​​ PicoScenes' C++ APIs. Developers can directly invoke low-level APIs in Python scripts by including the relevant header files (e.g., `include("PicoScenes/SystemTools.hxx")`) and loading dynamic libraries (e.g., `load_library("libSystemTools")`), enabling core functionalities like `​​wireless signal transmission/reception​`​ and `​​CSI file parsing​`​. The Python APIs are ​​`identical`​​ to their native C++ counterparts, with usage details documented in the [PicoScenes Native API Reference](https://ps.zpj.io/api_docs/). Powered by cppyy's real-time parsing mechanism, Python can directly manipulate hardware control logic (e.g., configuring USRP sampling rates or WiFi channel parameters) while maintaining ​​strict behavioral consistency​​ with the C++ implementation. Developers must validate dynamic library paths and environmental dependencies during cross-platform deployments.
